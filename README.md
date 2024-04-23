@@ -47,3 +47,68 @@ email_lst = ['stevesmith@abc.com',
 
 for email in email_lst:
     print(f"{email} : {get_email_otp(email)}")
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <form action="/calculate" method="post">
+        <label for="num1">Enter first number:</label>
+        <input type="number" id="num1" name="num1" required>
+        <label for="num2">Enter second number:</label>
+        <input type="number" id="num2" name="num2" required>
+        <label for="operation">Select operation:</label>
+        <select id="operation" name="operation">
+            <option value="add">Addition (+)</option>
+            <option value="subtract">Subtraction (-)</option>
+            <option value="multiply">Multiplication (*)</option>
+            <option value="divide">Division (/)</option>
+        </select>
+        <button type="submit">Calculate</button>
+    </form>
+</body>
+</html>
+
+==================================
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    num1 = float(request.form['num1'])
+    num2 = float(request.form['num2'])
+    operation = request.form['operation']
+    result = None
+
+    if operation == 'add':
+        result = num1 + num2
+    elif operation == 'subtract':
+        result = num1 - num2
+    elif operation == 'multiply':
+        result = num1 * num2
+    elif operation == 'divide':
+        if num2 != 0:
+            result = num1 / num2
+        else:
+            return "Error: Cannot divide by zero"
+
+    return render_template('result.html', num1=num1, num2=num2, operation=operation, result=result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+    
